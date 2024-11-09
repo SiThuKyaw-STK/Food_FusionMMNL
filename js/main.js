@@ -1,71 +1,70 @@
-// Function to show the Join Us Pop-Up
-function showJoinUsPopup() {
-  document.getElementById("joinUsPopup").style.display = "flex";
-}
-
-// Function to close the Join Us Pop-Up
-function closeJoinUsPopup() {
-  document.getElementById("joinUsPopup").style.display = "none";
-}
-
-// Close popup if user clicks outside the form
-window.onclick = function(event) {
-  const popup = document.getElementById("joinUsPopup");
-  if (event.target === popup) {
-      popup.style.display = "none";
-  }
-}
-
-
-
-// Display cookie consent if not already accepted
-window.onload = function() {
-  if (!localStorage.getItem('cookieAccepted')) {
-      document.getElementById('cookieConsent').style.display = 'block';
-  }
-};
-
-// Accept cookie function
-function acceptCookies() {
-  localStorage.setItem('cookieAccepted', 'true');
-  document.getElementById('cookieConsent').style.display = 'none';
-}
-
-document.getElementById("filter-form").addEventListener("submit", function(event) {
-  event.preventDefault(); // Prevent the form from submitting normally
-  const cuisine = document.getElementById("cuisine").value;
-  const dietaryPreference = document.getElementById("dietaryPreference").value;
-  const cookDifficulty = document.getElementById("cookDifficulty").value;
-  const page = 1; // Start from the first page for new filters
-
-  // Make AJAX request
-  fetch("fetch_recipes.php", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: new URLSearchParams({
-          cuisine: cuisine,
-          dietaryPreference: dietaryPreference,
-          cookDifficulty: cookDifficulty,
-          page: page
-      })
+$(document).ready(function() {
+  $("#join_us").click(function(){
+    $("#joinUsPopup").show();
   })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error("Network response was not ok");
-      }
-      return response.json(); // Expecting a JSON response
+
+
+  $("#close_btn").click(function(){
+    $("#joinUsPopup").hide()
   })
-  .then(data => {
-      document.getElementById("recipes-container").innerHTML = data.recipesHTML;
-      document.getElementById("pagination").innerHTML = data.paginationHTML;
-  })
-  .catch(error => {
-      console.error("There was a problem with the fetch operation:", error);
+
+  
+
+  // register form
+  $("#register_form").on("submit", function(e) {
+    e.preventDefault();
+
+    var formData = $(this).serialize();
+
+    $.ajax({
+        type: "POST",
+        url: "./register.php",
+        data: formData,
+        success: function(response) {
+            // Assuming response is a JSON object with a 'status' key
+            var result = JSON.parse(response);
+            console.log(result.success);
+                        
+            
+            if (result.success === true) {
+                window.location.href = "./loginform.php"
+            } else {
+                console.log("some error");
+            }
+        },
+        error: function() {
+            alert("There was an error with the registration. Please try again.");
+        }
+    });
+  });
+
+  // login form
+  $("#login_form").on("submit", function(e) {
+    e.preventDefault();
+
+    var formData = $(this).serialize();
+    console.log("test");
+    
+
+    $.ajax({
+        type: "POST",
+        url: "login.php",
+        data: formData,
+        success: function(response) {
+            // Assuming response is a JSON object with a 'status' key
+            var result = JSON.parse(response);                
+
+            if (result.success === true) {
+                $("#login_modal").addClass("hidden");
+                alert("Login successful! Redirecting to your community...");
+                window.location.href = "community-cookbook.php";
+            } else {
+                alert(result.message);
+            }
+        },
+        error: function() {
+            alert("There was an error logging in. Please try again.");
+        }
+    });
   });
 });
-
-
-
-

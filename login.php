@@ -1,76 +1,69 @@
 <?php
-// login.php
-session_start();
-$servername = "localhost:3307";
-$username = "root";
-$password = "";
-$dbname = "foodfusion";
+session_start(); // Start the session
+include 'db.php'; // Include your database connection
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Check login attempts
-    $attempts_sql = "SELECT attempts, last_attempt FROM login_attempts WHERE username = ?";
-    $attempts_stmt = $conn->prepare($attempts_sql);
-    $attempts_stmt->bind_param("s", $username);
-    $attempts_stmt->execute();
-    $attempts_stmt->store_result();
-    $attempts_stmt->bind_result($attempts, $last_attempt);
-    $attempts_stmt->fetch();
+    // Prepare to fetch user by email
+    $stmt = $conn->prepare("SELECT id, user_fname, user_lname, user_email, user_password, failed_attempts, lockout_until FROM user WHERE user_email = ?");
+    $stmt->bind_param("s", $email); // Bind parameters
+    $stmt->execute();
+    $result = $stmt->get_result(); // Get the result set from the executed statement
+    $user = $result->fetch_assoc(); // Fetch as an associative array
 
-    if ($attempts >= 3) {
-        $time_diff = time() - strtotime($last_attempt);
-        if ($time_diff < 180) { // Lockout for 3 minutes
-            echo "You are temporarily locked out. Please try again later.";
+    if ($user) { // Check if the fetch was successful
+        // Check if the user is locked out
+        if ($user['lockout_until'] && strtotime($user['lockout_until']) > time()) {
+            // User is still locked out
+            echo json_encode(['success' => false, 'message' => 'Account locked. Please try again later.']);
+            exit;
+        }
+
+        // Validate password
+        if (password_verify($password, $user['user_password'])) {
+            // Reset failed attempts and lockout timestamp on successful login
+            $stmt = $conn->prepare("UPDATE user SET failed_attempts = 0, lockout_until = NULL WHERE user_email = ?");
+            $stmt->bind_param("s", $email); // Bind parameters
+            $stmt->execute();
+
+            // Set session variable as an associative array for logged-in user
+            $_SESSION['user'] = [
+                'id' => $user['id'],
+                'user_fname' => $user['user_fname'],
+                'user_lname' => $user['user_lname'],
+                'user_email' => $user['user_email']
+            ];
+
+            echo json_encode(['success' => true]);
             exit;
         } else {
-            // Reset attempts after 3 minutes
-            $reset_sql = "DELETE FROM login_attempts WHERE username = ?";
-            $reset_stmt = $conn->prepare($reset_sql);
-            $reset_stmt->bind_param("s", $username);
-            $reset_stmt->execute();
+            // Increment failed attempts
+            $failedAttempts = $user['failed_attempts'] + 1;
+
+            // Determine if lockout is necessary
+            if ($failedAttempts >= 3) {
+                $lockoutTime = 15 * 60; // Lockout for 15 minutes
+                $lockoutUntil = date('Y-m-d H:i:s', time() + $lockoutTime);
+                
+                // Update failed attempts and lockout timestamp
+                $stmt = $conn->prepare("UPDATE user SET failed_attempts = ?, lockout_until = ? WHERE user_email = ?");
+                $stmt->bind_param("iss", $failedAttempts, $lockoutUntil, $email); // Bind parameters
+                $stmt->execute();
+            } else {
+                // Update only failed attempts
+                $stmt = $conn->prepare("UPDATE user SET failed_attempts = ? WHERE user_email = ?");
+                $stmt->bind_param("is", $failedAttempts, $email); // Bind parameters
+                $stmt->execute();
+            }
+
+            echo json_encode(['success' => false, 'message' => 'Invalid user_email or password.']);
+            exit;
         }
-    }
-
-    // Validate user credentials
-    $sql = "SELECT password FROM users WHERE username = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($hashed_password);
-    $stmt->fetch();
-
-    if ($stmt->num_rows > 0 && password_verify($password, $hashed_password)) {
-        // Successful login
-        $_SESSION['username'] = $username;
-        echo "Login successful!";
     } else {
-        // Increment login attempts
-        if ($attempts_stmt->num_rows > 0) {
-            $update_sql = "UPDATE login_attempts SET attempts = attempts + 1, last_attempt = NOW() WHERE username = ?";
-            $update_stmt = $conn->prepare($update_sql);
-            $update_stmt->bind_param("s", $username);
-            $update_stmt->execute();
-        } else {
-            $insert_sql = "INSERT INTO login_attempts (username, attempts, last_attempt) VALUES (?, 1, NOW())";
-            $insert_stmt = $conn->prepare($insert_sql);
-            $insert_stmt->bind_param("s", $username);
-            $insert_stmt->execute();
-        }
-        echo "Invalid username or password.";
+        echo json_encode(['success' => false, 'message' => 'Invalid user_email or password.']);
+        exit;
     }
-
-    $stmt->close();
 }
-
-$conn->close();
 ?>
-
