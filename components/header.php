@@ -3,6 +3,9 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,13 +52,13 @@ if (session_status() === PHP_SESSION_NONE) {
             <!-- Navbar Links (hidden on mobile, displayed on large screens) -->
             <nav class="navbar hidden lg:flex space-x-5">
                 <ul class="flex space-x-5">
-                    <li><a href="index.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Home</a></li>
-                    <li><a href="about.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">About Us</a></li>
-                    <li><a href="recipe-collection.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Recipe Collection</a></li>
-                    <li><a href="community-cookbook.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Community Cookbook</a></li>
-                    <li><a href="culinary-resources.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Culinary</a></li>
-                    <li><a href="educational-resources.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Educational</a></li>
-                    <li><a href="contact.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Contact Us</a></li>
+                    <li><a href="index.php" class=" <?= $currentPage == 'index.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Home</a></li>
+                    <li><a href="about.php" class=" <?= $currentPage == 'about.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">About Us</a></li>
+                    <li><a href="recipe-collection.php" class=" <?= $currentPage == 'recipe-collection.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Recipe Collection</a></li>
+                    <li><a href="community-cookbook.php" class=" <?= $currentPage == 'community-cookbook.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Community Cookbook</a></li>
+                    <li><a href="culinary-resources.php" class=" <?= $currentPage == 'culinary-resources.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Culinary</a></li>
+                    <li><a href="educational-resources.php" class=" <?= $currentPage == 'educational-resources.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Educational</a></li>
+                    <li><a href="contact.php" class=" <?= $currentPage == 'contact.php' ? 'bg-yellow-400 text-[#b8331b]' : '' ?> hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Contact Us</a></li>
                 </ul>
             </nav>
 
