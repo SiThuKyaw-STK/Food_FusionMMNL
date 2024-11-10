@@ -5,67 +5,67 @@ include 'components/header.php';
 $recipeId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $recipeDetailsQuery = <<<QUERY
-                            SELECT
-                                r.id,
-                                r.recipe_name,
-                                r.recipe_description,
-                                CONCAT(
-                                    '[',
-                                    GROUP_CONCAT(
-                                        DISTINCT CONCAT(
-                                            '{"id":',
-                                            c.id,
-                                            ',"name":"',
-                                            REPLACE(c.name, '"', '\"'),
-                                            '"}'
-                                        )
-                                    ),
-                                    ']'
-                                ) AS categories,
-                                CONCAT(
-                                    '[',
-                                    GROUP_CONCAT(
-                                        DISTINCT CONCAT(
-                                            '{"id":',
-                                            rm.id,
-                                            ',"media":"',
-                                            REPLACE(rm.content, '"', '\"'),
-                                            '"}'
-                                        )
-                                    ),
-                                    ']'
-                                ) AS images,
-                                CONCAT(
-                                    '[',
-                                    GROUP_CONCAT(
-                                        DISTINCT CONCAT(
-                                            '{"id":',
-                                            rc2.id,
-                                            ',"type":',
-                                            rc2.type,
-                                            ',"content":"',
-                                            REPLACE(rc2.content, '"', '\"'),
-                                            '"}'
-                                        )
-                                    ),
-                                    ']'
-                                ) AS contents
-                            FROM
-                                recipes r
-                            LEFT JOIN recipes_category rc ON
-                                rc.recipe_id = r.id
-                            LEFT JOIN category c ON
-                                c.id = rc.category_id
-                            LEFT JOIN recipes_media rm ON
-                                rm.recipe_id = r.id
-                            LEFT JOIN recipes_content rc2 ON
-                                rc2.recipe_id = r.id
-                            WHERE
-                                r.id = $recipeId
-                            GROUP BY
-                                r.id,
-                                r.recipe_name,
-                                r.recipe_description;
+SELECT
+    r.id,
+    r.recipe_name,
+    r.recipe_description,
+    CONCAT(
+        '[',
+        GROUP_CONCAT(
+            DISTINCT CONCAT(
+                '{"id":',
+                c.id,
+                ',"name":"',
+                REPLACE(c.name, '"', '\"'),
+                '"}'
+            )
+        ),
+        ']'
+    ) AS categories,
+    CONCAT(
+        '[',
+        GROUP_CONCAT(
+            DISTINCT CONCAT(
+                '{"id":',
+                rm.id,
+                ',"media":"',
+                REPLACE(rm.content, '"', '\"'),
+                '"}'
+            )
+        ),
+        ']'
+    ) AS images,
+    CONCAT(
+        '[',
+        GROUP_CONCAT(
+            DISTINCT CONCAT(
+                '{"id":',
+                rc2.id,
+                ',"type":',
+                rc2.type,
+                ',"content":"',
+                REPLACE(REPLACE(rc2.content, '"', '\''), '"', '\"'),
+                '"}'
+            )
+        ),
+        ']'
+    ) AS contents
+FROM
+    recipes r
+LEFT JOIN recipes_category rc ON
+    rc.recipe_id = r.id
+LEFT JOIN category c ON
+    c.id = rc.category_id
+LEFT JOIN recipes_media rm ON
+    rm.recipe_id = r.id
+LEFT JOIN recipes_content rc2 ON
+    rc2.recipe_id = r.id
+WHERE
+    r.id = $recipeId
+GROUP BY
+    r.id,
+    r.recipe_name,
+    r.recipe_description;
 QUERY;
 
 $recipeResult = $conn->query($recipeDetailsQuery);
