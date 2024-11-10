@@ -93,8 +93,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <li><a href="about.php" class="block text-black hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">About Us</a></li>
             <li><a href="recipe-collection.php" class="block text-black hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Recipe Collection</a></li>
             <li><a href="community-cookbook.php" class="block text-black hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Community Cookbook</a></li>
-            <li><a href="culinary-resources.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Culinary</a></li>
-            <li><a href="educational-resources.php" class="text-[#fdf5f1] hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Educational</a></li>
+            <li><a href="culinary-resources.php" class="block text-black hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Culinary</a></li>
+            <li><a href="educational-resources.php" class="block text-black hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Educational</a></li>
             <li><a href="contact.php" class="block text-black hover:bg-yellow-400 hover:text-[#b8331b] rounded px-3 py-2 transition">Contact Us</a></li>
         </ul>
     </nav>

@@ -337,10 +337,21 @@ if (!$recipesPopular) {
     </div>
 
 
-    <!-- Cookie Consent -->
-    <!-- <div id="cookieConsent" class="cookie-consent">
-        <p>We use cookies to enhance your experience on our website. By continuing, you agree to our <a href="#">cookie policy</a>.</p>
-        <button onclick="acceptCookies()">Accept</button>
-    </div> -->
+    <!-- Cookie Consent Bar -->
+    <div id="cookieConsent" class="cookie-consent fixed bottom-0 left-0 w-full bg-gray-800 text-white text-center p-4">
+        <p class="inline">
+            We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.
+            <a href="cookie-policy.php" class="text-yellow-300 underline ml-1">Learn more</a>.
+        </p>
+        <button id="acceptCookies" class="ml-4 bg-yellow-500 text-black px-3 py-1 rounded hover:bg-yellow-600">
+            Accept
+        </button>
+    </div>
+
+    <script>
+        $("#acceptCookies").click(function(){
+            $(this).parent().hide();
+        })
+    </script>
 
 <?php include 'components/footer.php'; ?>
