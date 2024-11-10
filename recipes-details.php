@@ -150,21 +150,17 @@ if ($recipeResult && $recipeResult->num_rows > 0) {
             <!-- Ingredients -->
             <div>
                 <h2 class="text-lg font-semibold">Ingredients</h2>
-                <ul class="mt-2 text-gray-600">
                     <?php foreach ($ingredients as $ingredient): ?>
-                        <li><?= $ingredient; ?></li>
+                        <?= $ingredient; ?>
                     <?php endforeach; ?>
-                </ul>
             </div>
             
             <!-- Directions -->
             <div>
                 <h2 class="text-lg font-semibold">Directions</h2>
-                <ol class="mt-2 text-gray-600 list-decimal list-inside">
                     <?php foreach ($directions as $direction): ?>
-                        <li><?= $direction; ?></li>
+                        <?= $direction; ?>
                     <?php endforeach; ?>
-                </ol>
             </div>
         </div>
     </div>
