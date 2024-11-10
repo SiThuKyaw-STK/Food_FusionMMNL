@@ -181,32 +181,113 @@ if (!$recipesPopular) {
 
 
     <!-- Recipe collection start-->
-    <h2 id="recipe-card-title" class="text-center text-orange-600 text-xl mb-6">Popular Recipes</h2>
-    <div class="flex flex-wrap gap-6 justify-center p-6">
-        <?php while ($recipe = $recipesPopular->fetch_assoc()): ?>
-            <div class="recipe-card bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden w-full md:w-72 transition-transform transform hover:translate-y-1">
-                <a href="recipes-details.php?id=<?= $recipe['id']; ?>">
-                    <img src="<?= $recipe['media']; ?>" alt="Recipe Image" class="w-full h-44 object-cover">
-                </a>
-                <div class="recipe-content p-4 text-gray-800">
-                    <h3 class="recipe-title text-xl text-orange-600 mb-2"><?= $recipe['recipe_name']; ?></h3>
-                    <p class="recipe-description text-sm text-gray-600 mb-2"><?= $recipe['recipe_description']; ?></p>
-                    <div class="recipe-tags flex flex-wrap gap-2">
-                        <?php
-                        // Decode categories JSON
-                        $categories = json_decode($recipe['categories'], true);
-                        if (is_array($categories)) {
-                            foreach ($categories as $category) {
-                                echo '<span class="tag bg-orange-600 text-white text-xs py-1 px-2 rounded-full whitespace-nowrap">' . htmlspecialchars($category['name']) . '</span>';
-                            }
-                        }
-                        ?>
-                    </div>
-                </div>
+    <h2 id="recipe-card-title">Popular Recipes</h2>
+    <div class="recipe-cards-container">
+    <div class="recipe-card">
+        <img src="images/Spicy Tofu Stir-Fry.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Spicy Tofu Stir-Fry</h3>
+            <p class="recipe-description">A quick, healthy, and spicy tofu stir-fry that’s bursting with flavor.</p>
+            <div class="recipe-tags">
+                <span class="tag">Vegan/Gluten-Free</span>
+                <span class="tag">Chinese</span>
+                <span class="tag">Easy</span>
             </div>
-        <?php endwhile; ?>
+        </div>
+    </div>
+    
+    <div class="recipe-card">
+        <img src="images/Classic Margherita Pizza.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Classic Margherita Pizza</h3>
+            <p class="recipe-description">An Italian classic with fresh mozzarella, tomatoes, and basil.</p>
+            <div class="recipe-tags">
+                <span class="tag">Vegetarian</span>
+                <span class="tag">Italian</span>
+                <span class="tag">Intermediate</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="recipe-card">
+        <img src="images/Vegetarian-Italian-Stuffed-Peppers.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Stuffed Bell Peppers</h3>
+            <p class="recipe-description">Colorful bell peppers filled with a savory mixture of rice, beans, and spices, baked to perfection for a delicious meal.</p>
+            <div class="recipe-tags">
+                <span class="tag">Vegetarian</span>
+                <span class="tag">Mexican</span>
+                <span class="tag">Moderate</span>
+            </div>
+        </div>
     </div>
 
+    <div class="recipe-card">
+        <img src="images/teri.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Teriyaki Chicken</h3>
+            <p class="recipe-description">Grilled or pan-seared chicken glazed with a sweet and savory teriyaki sauce, served with steamed rice and vegetables.</p>
+            <div class="recipe-tags">
+                <span class="tag">Poultry</span>
+                <span class="tag">Japanese</span>
+                <span class="tag">Moderate</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-card">
+        <img src="images/ChickenBiryani.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Biryani</h3>
+            <p class="recipe-description">A fragrant rice dish layered with marinated meat (or vegetables) and aromatic spices, often garnished with fried onions and boiled eggs.</p>
+            <div class="recipe-tags">
+                <span class="tag">Poultry/Vegetarian</span>
+                <span class="tag">Indian</span>
+                <span class="tag">Moderate</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-card">
+        <img src="images/creamy-mushroom-soup.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Creamy Mushroom Soup</h3>
+            <p class="recipe-description">A rich and creamy soup made with sautéed mushrooms and heavy cream, perfect for a comforting keto-friendly starter.</p>
+            <div class="recipe-tags">
+                <span class="tag">Keto</span>
+                <span class="tag">Amarican</span>
+                <span class="tag">Easy</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-card">
+        <img src="images/croissant.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Croissants</h3>
+            <p class="recipe-description">Flaky, buttery pastries made with a laminated dough that requires multiple folds and turns to create layers, resulting in a delicate texture.</p>
+            <div class="recipe-tags">
+                <span class="tag">Vegetarian</span>
+                <span class="tag">French</span>
+                <span class="tag">Hard</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-card">
+        <img src="images/ramen.jpg" alt="Recipe Image" class="recipe-image">
+        <div class="recipe-content">
+            <h3 class="recipe-title">Ramen from Scratch</h3>
+            <p class="recipe-description">A labor-intensive dish that includes making homemade noodles, rich pork broth (or vegetarian dashi), and toppings like soft-boiled eggs, chashu pork, and menma (bamboo shoots).</p>
+            <div class="recipe-tags">
+                <span class="tag">Pork/Vegetarian</span>
+                <span class="tag">Japanese</span>
+                <span class="tag">Hard</span>
+            </div>
+        </div>
+    </div>
+    <!-- Repeat .recipe-card for more recipes -->
+</div>
   
     <div class="carousel-container">
         <div class="carousel">
